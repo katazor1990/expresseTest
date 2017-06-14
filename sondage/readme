@@ -1,0 +1,60 @@
+Lister tous les sondages
+
+GET /polls
+data: {}
+response: 200, [
+	{
+		id: 1,
+		question: '',
+		answer: [0,0,1,1,2,0]
+	},
+	...
+]
+errors: none
+
+Recuperer un sondage
+
+GET /polls/:id
+data: {}
+response: 200, [
+	{
+		id: 1,
+		question: '',
+		answer: [0,0,1,1,2,0]
+	},
+	...
+]
+
+Creer un sondage
+
+POST /polls
+data: {
+		question: '',
+		answer: [0,0,1,1,2,0]
+	}
+response: 200
+error: 
+400, Missing parameter question
+400, Missing parameter answers
+400, Wrong parameter question
+400, Wrong parameter answers
+
+Supprimer un sondage
+
+DELETE /polls/:id
+
+data: non
+response: 204,
+errors: 404
+
+Voter
+
+POST /polls/:id/votes
+data: {
+	vote: <int>
+}
+response: 201, [0,0,0,1,2,0]
+errors: 
+	404, 
+	400, Missing parameter vote
+	40, Wrong parameter vote

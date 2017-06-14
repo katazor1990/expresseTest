@@ -1,0 +1,62 @@
+const polls = [
+  {
+    id: 1,
+    question: 'Do you like polls ?',
+    answers: ['yes', 'no', 'maybe', 'I don\'t know', 'can you repeat the question'],
+    votes: []
+  }
+];
+
+module.exports = {
+  getAll: () => {
+    return new Promise((resolve, reject) => {
+        polls ? resolve(polls) : reject(new Error('Error while fetching polls in database'));
+    });
+  },
+  getById: (id) => {
+    return new Promise((resolve, reject) => {
+      const poll = polls.find(p => p.id === parseInt(id, 10));
+
+      if (poll) {
+        resolve(poll);
+      } else {
+        reject(new Error('Poll does not exist'));
+      }
+    });
+  },
+  create: (question, answers) => {
+    return new Promise((resolve, reject) => {
+      const id = Math.max(...polls.map(p => p.id)) + 1;
+
+      const poll = {
+        id, question, answers,
+        votes: []
+      };
+
+      polls.push(poll);
+
+      polls.includes(poll) ? resolve(poll) : reject(new Error('Error while inserting new poll in database'));
+    });
+  },
+  delete: (id) => {
+    return new Promise((resolve, reject) => {
+      const index = polls.findIndex(p => p.id === id);
+      polls.splice(index, 1);
+
+      !polls.includes(poll) ? resolve() : reject(new Error('Error while deleting poll from database'));
+    });
+  },
+  vote: (id, vote) => {
+    return new Promise((resolve, reject) => {
+      const poll = polls.find(p => p.id === id);
+
+      const nbVotes = poll.votes.length;
+
+      poll.votes.push(vote);
+
+      poll.votes.length === nbVotes + 1
+        ? resolve(poll.votes)
+        : reject(new Error('Error while inserting vote in database'));
+    });
+  }
+};
